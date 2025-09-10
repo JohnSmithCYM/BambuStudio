@@ -56,7 +56,8 @@ ExternalProject_Add(dep_OpenSSL
         "--openssldir=${DESTDIR}/usr/local"
         "--prefix=${DESTDIR}/usr/local"
         ${_cross_comp_prefix_line}
-        no-shared
+        no-tests
+		no-shared
         no-asm
         no-ssl3-method
         no-dynamic-engine
