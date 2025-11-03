@@ -107,7 +107,14 @@ vec4 get_base_color(vec3 type_rangeData_deltaExtruder)
             else
             {
                 float flag = sign(type_rangeData_deltaExtruder.z);
-                final_color.rgb = KTravel_Colors[int(flag) + 1];
+                int value = int(flag) + 1;
+                if(value == 0){
+                    final_color.rgb = KTravel_Colors[0];
+                }else if(value == 1){
+                    final_color.rgb = KTravel_Colors[1];
+                }else if(value == 2){
+                    final_color.rgb = KTravel_Colors[2];
+                }
             }
         }
         else
