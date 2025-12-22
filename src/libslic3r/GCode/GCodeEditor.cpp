@@ -426,7 +426,21 @@ std::string GCodeEditor::write_layer_gcode(
             overhang_fan_control= false;
             overhang_fan_speed   = 0;
             fan_speed_new      = 0;
-            additional_fan_speed_new = EXTRUDER_CONFIG(first_x_layer_fan_speed);
+            
+            // BBS: handle first x layer fan speed
+            int cur_layer = int(layer_id);
+            int cur_layer_fan_speed = int(EXTRUDER_CONFIG(first_x_layer_fan_speed)
+            if (cur_layer >= 1 && close_fan_the_first_x_layers > 0) {
+                int end_layer = std::max(1, close_fan_the_first_x_layers);
+                int layer_clamped = std::clamp(cur_layer, 1, end_layer);
+
+                float t = (end_layer == 1) ? 1.0f : float(layer_clamped - 1) / float(end_layer - 1);
+                float v_end = float(EXTRUDER_CONFIG(first_x_layer_fan_speed));
+
+                cur_layer_fan_speed = int(v_end * t + 0.5f);
+            }
+
+            additional_fan_speed_new = cur_layer_fan_speed;        
         }
 #undef EXTRUDER_CONFIG
         if (fan_speed_new != m_fan_speed) {
